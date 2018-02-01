@@ -1,0 +1,5 @@
+host: {{ tower_host }}
+username: {{ tower_username }}
+{% if tower_password is defined %}
+password: {{ tower_password }}
+{% endif %}

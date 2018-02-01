@@ -1,0 +1,45 @@
+---
+- name: Install Pip
+  yum:
+    name: python-pip
+    state: installed
+    update_cache: yes
+
+- name: Makes sure pip is current
+  pip:
+    name: pip
+    state: latest
+
+- name: Install tower-cli
+  pip:
+    name: ansible-tower-cli
+
+
+- name: Global Configuration
+  block:
+  - name: Create Configuration Directory
+    file:
+      name: /etc/tower
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+  - name: Copy Configuration
+    template:
+      src: tower_cli.cfg.j2
+      dest: "/etc/tower/tower_cli.cfg"
+      owner: root
+      group: root
+      mode: 0644
+  when: tower_cli_config_location == "global"
+
+- name: User Configuration
+  block:
+  - name: Copy Configuration
+    template:
+      src: tower_cli.cfg.j2
+      dest: "~/.tower_cli.cfg"
+      mode: 0600
+  when: tower_cli_config_location == "user"
+  become_user: "{{ tower_cli_user | default('root') }}"
+  become: yes

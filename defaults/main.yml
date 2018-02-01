@@ -1,0 +1,6 @@
+---
+tower_host: localhost
+tower_username: admin
+
+tower_cli_config_location: "global"
+#tower_cli_config_location: "user"
